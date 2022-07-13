@@ -1,4 +1,4 @@
-import books from "../models/Book.js";
+import books from '../models/Book.js';
 
 class BookCotroller {
   static listBooks = (req, res) => {
@@ -18,7 +18,7 @@ class BookCotroller {
   static updateBook = (req, res) => {
     const id = req.params.id;
     books.findByIdAndUpdate(id, { $set: req.body }, (err) => {
-      if (!err) res.status(200).send({ message: "Livro atualizado com sucesso" });
+      if (!err) res.status(200).send({ message: 'successfully updated' });
       else res.status(400).send({ message: err.message });
     });
   };
@@ -34,8 +34,8 @@ class BookCotroller {
   static deleteBookById = (req, res) => {
     const id = req.params.id;
     books.findByIdAndDelete(id, (err, books) => {
-      if (err) res.status(400).send({ message: `Não foi possível encontrar livro com o id ${id} para remover.` });
-      else res.status(200).send({ message: `O livro com o id ${id} foi removido com sucesso.` });
+      if (err) res.status(400).send({ message: `Could not find book with id ${id} to remove` });
+      else res.status(200).send({ message: `The book with the id ${id} was successfully removed` });
     });
   };
 };
