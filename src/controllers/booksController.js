@@ -2,9 +2,11 @@ import books from '../models/Book.js';
 
 class BookCotroller {
   static listBooks = (req, res) => {
-    books.find((err, books) => {
-      res.status(200).json(books);
-    });
+    books.find()
+      .populate('author')
+      .exec((err, books) => {
+        res.status(200).json(books);
+      });
   };
 
   static createBook = (req, res) => {
@@ -25,10 +27,12 @@ class BookCotroller {
 
   static searchBookById = (req, res) => {
     const id = req.params.id;
-    books.findById(id, (err, books) => {
-      if (err) res.status(404).send({ message: err.message });
-      else res.status(200).json(books);
-    });
+    books.findById(id)
+      .populate('author', 'name')
+      .exec((err, books) => {
+        if (err) res.status(404).send({ message: err.message });
+        else res.status(200).json(books);
+      });
   };
 
   static deleteBookById = (req, res) => {
@@ -38,6 +42,15 @@ class BookCotroller {
       else res.status(200).send({ message: `The book with the id ${id} was successfully removed` });
     });
   };
+
+  static searchBooksByPublishingCompany = (req, res) => {
+    const publishingCompany = req.query.publishingCompany;
+    books.find({ 'publishingCompany': publishingCompany }, {}, (err, books) => {
+      if (err) res.status(400).send({ message: err.message });
+      else res.status(200).json(books);
+    })
+
+  }
 };
 
 export default BookCotroller;
